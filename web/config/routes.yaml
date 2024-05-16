@@ -9,3 +9,6 @@ app_page:
 parser:
     path: /parser
     controller: App\Controller\ParserController::index
+app_api:
+    resource: '../src/Controller/Api'
+    type: annotation

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Domain\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -22,7 +21,7 @@ class Volume
     #[Column(name: 'volume')]
     private int $volume;
 
-    #[OneToMany(targetEntity: Products::class, mappedBy: 'volume', cascade: ["persist", "remove"])]
+    #[OneToMany(targetEntity: Product::class, mappedBy: 'volume', cascade: ["persist", "remove"])]
     private $products;
 
     #[Column(name: 'created_at')]
@@ -43,7 +42,7 @@ class Volume
         $this->id = $id;
     }
 
-    public function addProduct(Products $products): void
+    public function addProduct(Product $products): void
     {
         $this->products[] = $products;
     }

@@ -2,14 +2,24 @@ version: '3'
 
 services:
 
-  nginx-app:
+  nginx:
     image: $NGINX_TAG
-    container_name: "${PROJECT_NAME}_app_nginx"
+    container_name: "${PROJECT_NAME}_nginx"
     volumes:
      - ./:/var/www/html/
      - ./docker/nginx/app:/etc/nginx/conf.d/
     ports:
-     - "80:80"
+      - "80:80"
+      - "81:81"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend/app/Dockerfile
+    volumes:
+      - ./:/var/www/html/
+    container_name: "${PROJECT_NAME}_frontend"
+
 
   php:
     build:

@@ -1,39 +1,34 @@
 <?php
 
-namespace App\Entity;
+namespace App\Domain\Entity;
 
+use App\Application\Repository\FeedbackRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity]
-#[Table('brand')]
-class Brand
+#[Entity(repositoryClass: FeedbackRepository::class)]
+#[Table('feedbacks')]
+class Feedback
 {
     #[Id]
     #[Column(name: 'id'), GeneratedValue]
     private int $id;
 
-    #[Column(name: 'name')]
-    private string $name;
+    #[Column(name: 'feedback')]
+    private int $feedback;
 
-    #[OneToMany(targetEntity: Products::class, mappedBy: 'brand', cascade: ["persist", "remove"])]
+    #[ManyToOne(targetEntity: Product::class, cascade: ["persist", "remove"], inversedBy: 'feedback')]
+    #[JoinColumn(name: 'product_id', referencedColumnName: 'id')]
     private $products;
 
     #[Column(name: 'created_at')]
     private \DateTime $createdAt;
-
-    public function __construct()
-    {
-        $this->products = new ArrayCollection();
-    }
 
     public function getId(): int
     {
@@ -45,14 +40,9 @@ class Brand
         $this->id = $id;
     }
 
-    public function getName(): string
+    public function getProducts(): ArrayCollection
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
+        return $this->products;
     }
 
     public function getCreatedAt(): \DateTime
@@ -65,14 +55,13 @@ class Brand
         $this->createdAt = $createdAt;
     }
 
-    public function addProduct(Products $products): void
+    public function getFeedback(): int
     {
-        $this->products[] = $products;
+        return $this->feedback;
     }
 
-    public function getProducts(): ArrayCollection
+    public function setFeedback(int $feedback): void
     {
-        return $this->products;
+        $this->feedback = $feedback;
     }
-
 }
